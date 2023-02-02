@@ -1,15 +1,19 @@
 package org.example;
 
-public class University {
-    String id, fullName, shortName;
-    int yearOfFoundation, StudyProfile, mainProfile;
+import org.apache.commons.lang3.StringUtils;
 
-    public University(String id, String fullName, String shortName, int yearOfFoundation, int studyProfile, int mainProfile) {
+public class University {
+    private String id, fullName, shortName;
+    private int yearOfFoundation;
+
+    private StudyProfile StudyProfile, mainProfile;
+
+    public University(String id, String fullName, String shortName, int yearOfFoundation, StudyProfile studyProfile, StudyProfile mainProfile) {
         this.id = id;
         this.fullName = fullName;
         this.shortName = shortName;
         this.yearOfFoundation = yearOfFoundation;
-        StudyProfile = studyProfile;
+        this.StudyProfile = studyProfile;
         this.mainProfile = mainProfile;
     }
 
@@ -45,19 +49,19 @@ public class University {
         this.yearOfFoundation = yearOfFoundation;
     }
 
-    public int getStudyProfile() {
+    public StudyProfile getStudyProfile() {
         return StudyProfile;
     }
 
-    public void setStudyProfile(int studyProfile) {
+    public void setStudyProfile(StudyProfile studyProfile) {
         StudyProfile = studyProfile;
     }
 
-    public int getMainProfile() {
+    public StudyProfile getMainProfile() {
         return mainProfile;
     }
 
-    public void setMainProfile(int mainProfile) {
+    public void setMainProfile(StudyProfile mainProfile) {
         this.mainProfile = mainProfile;
     }
 
@@ -68,8 +72,48 @@ public class University {
                 ", fullName='" + fullName + '\'' +
                 ", shortName='" + shortName + '\'' +
                 ", yearOfFoundation=" + yearOfFoundation +
-                ", StudyProfile=" + StudyProfile +
+                ", StudyProfile=" + StudyProfile.getProfileName() +
                 ", mainProfile=" + mainProfile +
                 '}';
+    }
+
+    // сортировка университетов по идентификатору
+    public static class IdUniversityCompare implements UniversityInterface {
+        @Override
+        public int compare(University o1, University o2) {
+            return StringUtils.compare(o1.getId(), o2.getId());
+        }
+    }
+
+    // сортировка университетов по полному наименованию
+    public static class FullNameUniversityCompare implements UniversityInterface {
+        @Override
+        public int compare(University o1, University o2) {
+            return StringUtils.compare(o1.getFullName(), o2.getFullName());
+        }
+    }
+
+    // сортировка университетов по короткому наименованию
+    public static class ShortNameUniversityCompare implements UniversityInterface {
+        @Override
+        public int compare(University o1, University o2) {
+            return StringUtils.compare(o1.getShortName(), o2.getShortName());
+        }
+    }
+
+    // сортировка университетов по году основания
+    public static class YearOfFoundationUniversityCompare implements UniversityInterface {
+        @Override
+        public int compare(University o1, University o2) {
+            return Integer.compare(o1.getYearOfFoundation(), o2.getYearOfFoundation());
+        }
+    }
+
+    // сортировка университетов по профилю студентов
+    public static class StudentProfileCompare implements UniversityInterface {
+        @Override
+        public int compare(University o1, University o2) {
+            return StringUtils.compare(o1.getStudyProfile().getProfileName(), o2.getStudyProfile().getProfileName());
+        }
     }
 }

@@ -1,9 +1,11 @@
 package org.example;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Student {
-    String fullName, universityId;
-    int currentCourseNumber;
-    float avgExamScore;
+    private String fullName, universityId;
+    private int currentCourseNumber;
+    private float avgExamScore;
 
     public Student(String fullName, String universityId, int currentCourseNumber, float avgExamScore) {
         this.fullName = fullName;
@@ -52,5 +54,37 @@ public class Student {
                 ", currentCourseNumber=" + currentCourseNumber +
                 ", avgExamScore=" + avgExamScore +
                 '}';
+    }
+
+    // сортировка студентов по имени
+    public static class FullNameStudentCompare implements StudentInterface {
+        @Override
+        public int compare(Student o1, Student o2) {
+            return StringUtils.compare(o1.getFullName(), o2.getFullName());
+        }
+    }
+
+    // сортировка студентов по идентификатору университета
+    public static class UniversityIdStudentCompare implements StudentInterface {
+        @Override
+        public int compare(Student o1, Student o2) {
+            return StringUtils.compare(o1.getUniversityId(), o2.getUniversityId());
+        }
+    }
+
+    // сортировка студентов по номеру курса
+    public static class CurrentCourseNumberStudentCompare implements StudentInterface {
+        @Override
+        public int compare(Student o1, Student o2) {
+            return Integer.compare(o1.getCurrentCourseNumber(), o2.getCurrentCourseNumber());
+        }
+    }
+
+    // сортировка студентов по среднему баллу в обратном порядке
+    public static class AvgExamScoreStudentCompare implements StudentInterface {
+        @Override
+        public int compare(Student o1, Student o2) {
+            return Float.compare(o2.getAvgExamScore(), o1.getAvgExamScore());
+        }
     }
 }
