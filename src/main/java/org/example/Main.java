@@ -6,9 +6,9 @@ import java.util.List;
 
 public class Main {
     // Коллекция студентов
-    private static final List<Student> studentList = new ArrayList<>();
+    private static List<Student> studentList = new ArrayList<>();
     // Коллекция университетов
-    private static final List<University> universityList = new ArrayList<>();
+    private static List<University> universityList = new ArrayList<>();
     // Коллекция сортировок студентов
     private static final List<Comparator<Student>> comparatorStudentList = new ArrayList<>();
     // Коллекция сортировок университетов
@@ -24,6 +24,7 @@ public class Main {
         Comparator<Student> studentUniversityIdComparator = comparatorStudentList.get(1);
         Comparator<Student> studentCurrentCourseNumberComparator = comparatorStudentList.get(2);
         Comparator<Student> studentAvgExamScoreComparator = comparatorStudentList.get(3);
+
         // Добавление сортировок университетов в коллекцию
         comparatorUniversityList.add(ReturnComparator.getMyUniversityComparator(UniversityEnumComparator.IdUniversityComparator));
         comparatorUniversityList.add(ReturnComparator.getMyUniversityComparator(UniversityEnumComparator.FullNameUniversityComparator));
@@ -35,27 +36,54 @@ public class Main {
         Comparator<University> universityShortNameComparator = comparatorUniversityList.get(2);
         Comparator<University> universityYearOfFoundationComparator = comparatorUniversityList.get(3);
         Comparator<University> universityStudentProfileComparator = comparatorUniversityList.get(4);
-        // Сортировка и вывод студентов
-        System.out.println("--Сортировка и вывод студентов по имени--");
-        ReadExelData.readStudent().stream().sorted(studentFullNameComparator).forEach(System.out::println);
-        System.out.println("--Сортировка и вывод студентов по идентификатору уиверситета--");
-        ReadExelData.readStudent().stream().sorted(studentUniversityIdComparator).forEach(System.out::println);
-        System.out.println("--Сортировка и вывод студентов по номеру курса--");
-        ReadExelData.readStudent().stream().sorted(studentCurrentCourseNumberComparator).forEach(System.out::println);
-        System.out.println("--Сортировка и вывод студентов по среднему баллу от большего к меньшему--");
-        ReadExelData.readStudent().stream().sorted(studentAvgExamScoreComparator).forEach(System.out::println);
-        // Сортировка и вывод университетов
-        System.out.println("--Сортировка и вывод университетов по названию--");
-        ReadExelData.readUniversity().stream().sorted(universityFullNameComparator).forEach(System.out::println);
-        System.out.println("--Сортировка и вывод университетов по идентификатору--");
-        ReadExelData.readUniversity().stream().sorted(universityIdComparator).forEach(System.out::println);
-        System.out.println("--Сортировка и вывод университетов по сокращенному имени--");
-        ReadExelData.readUniversity().stream().sorted(universityShortNameComparator).forEach(System.out::println);
-        System.out.println("--Сортировка и вывод университетов по году основания--");
-        ReadExelData.readUniversity().stream().sorted(universityYearOfFoundationComparator).forEach(System.out::println);
-        System.out.println("--Сортировка и вывод университетов по профилю подготовки--");
-        ReadExelData.readUniversity().stream().sorted(universityStudentProfileComparator).forEach(System.out::println);
 
+        // сериализация студентов
+        System.out.println("--сериализация студентов--");
+        studentList = ReadExelData.readStudent();
+        String studentListInJson = JsonUtil.serializedStudentList(studentList);
+        System.out.println(studentListInJson);
+        System.out.println();
+        // десериализация студентов
+        System.out.println("--десериализация студентов--");
+        // сохраняем новую коллекцию студентов
+        List<Student> students = JsonUtil.deserializedStudentList(studentListInJson);
+        students.forEach(System.out::println);
+        System.out.println();
+        // сериализация университетов
+        System.out.println("--сериализация университетов--");
+        universityList = ReadExelData.readUniversity();
+        String universityListInJson = JsonUtil.serializedUniversityList(universityList);
+        System.out.println(universityListInJson);
+        System.out.println();
+        // десериализация университетов
+        System.out.println("--десериализация университетов--");
+        // сохраняем новую коллекцию университетов
+        List<University> universities = JsonUtil.deserializedUniversityList(universityListInJson);
+        universities.forEach(System.out::println);
+        System.out.println();
+        // сериализация/десериализация отдельных студентов в стриме (по среднему баллу) с сортировкой и вывод на печать
+        System.out.println("--сериализация/десериализация отдельных студентов в стриме (по среднему баллу) с сортировкой и вывод на печать--");
+        studentList.stream().filter(student -> student.getAvgExamScore()>4.0f).sorted(studentAvgExamScoreComparator).
+                forEach(student -> {
+                    String studentList = JsonUtil.serializedStudent(student);
+                    System.out.println(studentList);
+                    Student deserialisedStudent = JsonUtil.deserializedStudent(studentList);
+                    System.out.println(deserialisedStudent);
+                });
+        System.out.println();
+        // сериализация/десериализация отдельных университетов в стриме (по году основания) с сортировкой и вывод на печать
+        System.out.println("--сериализация/десериализация отдельных университетов в стриме (по году основания) с сортировкой и вывод на печать--");
+        universityList.stream().filter(university -> university.getYearOfFoundation()>1950).sorted(universityYearOfFoundationComparator).
+                forEach(university -> {
+                    String universityList = JsonUtil.serializedUniversity(university);
+                    System.out.println(universityList);
+                    University deserialisedUniversity = JsonUtil.deserializedUniversity(universityList);
+                    System.out.println(deserialisedUniversity);
+                });
 
+        // Получение списка коллекций из утилитного класса
+        List<Statistics> statisticsList = GenerateStatistic.statisticsList(studentList, universityList);
+        // Запись и создание файла
+        XlsWriter.createAndWriteTable(statisticsList, "src/main/resources/statistic.xlsx");
     }
 }

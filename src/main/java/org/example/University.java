@@ -1,12 +1,21 @@
 package org.example;
 
+import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.StringUtils;
 
 public class University {
-    private String id, fullName, shortName;
+    @SerializedName("Идентификатор")
+    private String id;
+    @SerializedName("Полное наименование")
+    private String fullName;
+    @SerializedName("Аббревиатура")
+    private String shortName;
+    @SerializedName("Год основания")
     private int yearOfFoundation;
-
-    private StudyProfile StudyProfile, mainProfile;
+    @SerializedName("Профиль обучения")
+    private StudyProfile StudyProfile;
+    @SerializedName("Основной профиль обучения")
+    private StudyProfile mainProfile;
 
     public University(String id, String fullName, String shortName, int yearOfFoundation, StudyProfile studyProfile, StudyProfile mainProfile) {
         this.id = id;
