@@ -3,20 +3,31 @@ package org.example;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.xml.bind.annotation.*;
+
+//@XmlRootElement(name = "universityEntry")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class University {
-    @SerializedName("Идентификатор")
+    @SerializedName("РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ")
+    @XmlElement(name = "universityId")
     private String id;
-    @SerializedName("Полное наименование")
+    @SerializedName("РџРѕР»РЅРѕРµ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ")
+    @XmlElement(name = "universityName")
     private String fullName;
-    @SerializedName("Аббревиатура")
+    @SerializedName("РђР±Р±СЂРµРІРёР°С‚СѓСЂР°")
+    @XmlTransient
     private String shortName;
-    @SerializedName("Год основания")
+    @SerializedName("Р“РѕРґ РѕСЃРЅРѕРІР°РЅРёСЏ")
+    @XmlTransient
     private int yearOfFoundation;
-    @SerializedName("Профиль обучения")
+    @SerializedName("РџСЂРѕС„РёР»СЊ РѕР±СѓС‡РµРЅРёСЏ")
+    @XmlTransient
     private StudyProfile StudyProfile;
-    @SerializedName("Основной профиль обучения")
+    @SerializedName("РћСЃРЅРѕРІРЅРѕР№ РїСЂРѕС„РёР»СЊ РѕР±СѓС‡РµРЅРёСЏ")
+    @XmlElement(name = "universityProfile")
     private StudyProfile mainProfile;
 
+    public University(){}
     public University(String id, String fullName, String shortName, int yearOfFoundation, StudyProfile studyProfile, StudyProfile mainProfile) {
         this.id = id;
         this.fullName = fullName;
@@ -49,7 +60,6 @@ public class University {
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
-
     public int getYearOfFoundation() {
         return yearOfFoundation;
     }
@@ -86,7 +96,7 @@ public class University {
                 '}';
     }
 
-    // сортировка университетов по идентификатору
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ
     public static class IdUniversityCompare implements UniversityInterface {
         @Override
         public int compare(University o1, University o2) {
@@ -94,7 +104,7 @@ public class University {
         }
     }
 
-    // сортировка университетов по полному наименованию
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РїРѕ РїРѕР»РЅРѕРјСѓ РЅР°РёРјРµРЅРѕРІР°РЅРёСЋ
     public static class FullNameUniversityCompare implements UniversityInterface {
         @Override
         public int compare(University o1, University o2) {
@@ -102,7 +112,7 @@ public class University {
         }
     }
 
-    // сортировка университетов по короткому наименованию
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РїРѕ РєРѕСЂРѕС‚РєРѕРјСѓ РЅР°РёРјРµРЅРѕРІР°РЅРёСЋ
     public static class ShortNameUniversityCompare implements UniversityInterface {
         @Override
         public int compare(University o1, University o2) {
@@ -110,7 +120,7 @@ public class University {
         }
     }
 
-    // сортировка университетов по году основания
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РїРѕ РіРѕРґСѓ РѕСЃРЅРѕРІР°РЅРёСЏ
     public static class YearOfFoundationUniversityCompare implements UniversityInterface {
         @Override
         public int compare(University o1, University o2) {
@@ -118,7 +128,7 @@ public class University {
         }
     }
 
-    // сортировка университетов по профилю студентов
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РїРѕ РїСЂРѕС„РёР»СЋ СЃС‚СѓРґРµРЅС‚РѕРІ
     public static class StudentProfileCompare implements UniversityInterface {
         @Override
         public int compare(University o1, University o2) {

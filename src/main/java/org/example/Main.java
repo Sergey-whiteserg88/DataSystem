@@ -1,21 +1,27 @@
 package org.example;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Main {
-    // Коллекция студентов
+
+    // РљРѕР»Р»РµРєС†РёСЏ СЃС‚СѓРґРµРЅС‚РѕРІ
     private static List<Student> studentList = new ArrayList<>();
-    // Коллекция университетов
+    // РљРѕР»Р»РµРєС†РёСЏ СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
     private static List<University> universityList = new ArrayList<>();
-    // Коллекция сортировок студентов
+    // РљРѕР»Р»РµРєС†РёСЏ СЃРѕСЂС‚РёСЂРѕРІРѕРє СЃС‚СѓРґРµРЅС‚РѕРІ
     private static final List<Comparator<Student>> comparatorStudentList = new ArrayList<>();
-    // Коллекция сортировок университетов
+    // РљРѕР»Р»РµРєС†РёСЏ СЃРѕСЂС‚РёСЂРѕРІРѕРє СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
     private static final List<Comparator<University>> comparatorUniversityList = new ArrayList<>();
 
+    private static final Logger log = Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
-        // Добавление сортировок студентов в коллекцию
+        log.info("РќР°С‡Р°Р»Рѕ СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹");
+        // Р”РѕР±Р°РІР»РµРЅРёРµ СЃРѕСЂС‚РёСЂРѕРІРѕРє СЃС‚СѓРґРµРЅС‚РѕРІ РІ РєРѕР»Р»РµРєС†РёСЋ
         comparatorStudentList.add(ReturnComparator.getMyStudentComparator(StudentEnumComparator.fullNameComparator));
         comparatorStudentList.add(ReturnComparator.getMyStudentComparator(StudentEnumComparator.UniversityIdComparator));
         comparatorStudentList.add(ReturnComparator.getMyStudentComparator(StudentEnumComparator.CurrentCourseNumberComparator));
@@ -25,7 +31,7 @@ public class Main {
         Comparator<Student> studentCurrentCourseNumberComparator = comparatorStudentList.get(2);
         Comparator<Student> studentAvgExamScoreComparator = comparatorStudentList.get(3);
 
-        // Добавление сортировок университетов в коллекцию
+        // Р”РѕР±Р°РІР»РµРЅРёРµ СЃРѕСЂС‚РёСЂРѕРІРѕРє СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РІ РєРѕР»Р»РµРєС†РёСЋ
         comparatorUniversityList.add(ReturnComparator.getMyUniversityComparator(UniversityEnumComparator.IdUniversityComparator));
         comparatorUniversityList.add(ReturnComparator.getMyUniversityComparator(UniversityEnumComparator.FullNameUniversityComparator));
         comparatorUniversityList.add(ReturnComparator.getMyUniversityComparator(UniversityEnumComparator.ShortNameUniversityComparator));
@@ -37,53 +43,38 @@ public class Main {
         Comparator<University> universityYearOfFoundationComparator = comparatorUniversityList.get(3);
         Comparator<University> universityStudentProfileComparator = comparatorUniversityList.get(4);
 
-        // сериализация студентов
-        System.out.println("--сериализация студентов--");
-        studentList = ReadExelData.readStudent();
-        String studentListInJson = JsonUtil.serializedStudentList(studentList);
-        System.out.println(studentListInJson);
-        System.out.println();
-        // десериализация студентов
-        System.out.println("--десериализация студентов--");
-        // сохраняем новую коллекцию студентов
-        List<Student> students = JsonUtil.deserializedStudentList(studentListInJson);
-        students.forEach(System.out::println);
-        System.out.println();
-        // сериализация университетов
-        System.out.println("--сериализация университетов--");
-        universityList = ReadExelData.readUniversity();
-        String universityListInJson = JsonUtil.serializedUniversityList(universityList);
-        System.out.println(universityListInJson);
-        System.out.println();
-        // десериализация университетов
-        System.out.println("--десериализация университетов--");
-        // сохраняем новую коллекцию университетов
-        List<University> universities = JsonUtil.deserializedUniversityList(universityListInJson);
-        universities.forEach(System.out::println);
-        System.out.println();
-        // сериализация/десериализация отдельных студентов в стриме (по среднему баллу) с сортировкой и вывод на печать
-        System.out.println("--сериализация/десериализация отдельных студентов в стриме (по среднему баллу) с сортировкой и вывод на печать--");
-        studentList.stream().filter(student -> student.getAvgExamScore()>4.0f).sorted(studentAvgExamScoreComparator).
-                forEach(student -> {
-                    String studentList = JsonUtil.serializedStudent(student);
-                    System.out.println(studentList);
-                    Student deserialisedStudent = JsonUtil.deserializedStudent(studentList);
-                    System.out.println(deserialisedStudent);
-                });
-        System.out.println();
-        // сериализация/десериализация отдельных университетов в стриме (по году основания) с сортировкой и вывод на печать
-        System.out.println("--сериализация/десериализация отдельных университетов в стриме (по году основания) с сортировкой и вывод на печать--");
-        universityList.stream().filter(university -> university.getYearOfFoundation()>1950).sorted(universityYearOfFoundationComparator).
-                forEach(university -> {
-                    String universityList = JsonUtil.serializedUniversity(university);
-                    System.out.println(universityList);
-                    University deserialisedUniversity = JsonUtil.deserializedUniversity(universityList);
-                    System.out.println(deserialisedUniversity);
-                });
 
-        // Получение списка коллекций из утилитного класса
+        // РїРѕР»СѓС‡РµРЅРёРµ СЃРїРёСЃРєР° СЃС‚СѓРґРµРЅС‚РѕРІ
+        log.info("РїРѕР»СѓС‡РµРЅРёРµ СЃРїРёСЃРєР° СЃС‚СѓРґРµРЅС‚РѕРІ");
+        studentList = ReadExelData.readStudent();
+        // СЃРѕСЂС‚РёСЂРѕРІРєР° СЃРїРёСЃРєР° СЃС‚СѓРґРµРЅС‚РѕРІ
+        studentList.sort(studentAvgExamScoreComparator);
+        // СЃРѕР·РґР°РЅРёС‚Рµ СЌРєР·РµРјРїР»СЏСЂР° РєР»Р°СЃСЃР° СЃРїРёСЃРєР° СЃС‚СѓРґРµРЅС‚РѕРІ
+        Students students = new Students(studentList);
+
+        // РїРѕР»СѓС‡РµРЅРёРµ СЃРїРёСЃРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
+        log.info("РїРѕР»СѓС‡РµРЅРёРµ СЃРїРёСЃРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ");
+        universityList = ReadExelData.readUniversity();
+        // СЃРѕСЂС‚РёСЂРѕРІРєР° СЃРїРёСЃРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
+        universityList.sort(universityYearOfFoundationComparator);
+        // СЃРѕР·РґР°РЅРёС‚Рµ СЌРєР·РµРјРїР»СЏСЂР° РєР»Р°СЃСЃР° СЃРїРёСЃРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
+        Universities universities = new Universities(universityList);
+
+        // РџРѕР»СѓС‡РµРЅРёРµ СЃС‚Р°С‚РёСЃС‚РёРєРё РёР· СѓС‚РёР»РёС‚РЅРѕРіРѕ РєР»Р°СЃСЃР°
+        log.info("РіРµРЅРµСЂРёСЂРѕРІР°РЅРёРµ СЃС‚Р°С‚РёСЃС‚РёРєРё");
         List<Statistics> statisticsList = GenerateStatistic.statisticsList(studentList, universityList);
-        // Запись и создание файла
+        // Р—Р°РїРёСЃСЊ Рё СЃРѕР·РґР°РЅРёРµ С„Р°Р№Р»Р° СЃС‚Р°С‚РёСЃС‚РёРєРё
+        log.info("СЃРѕР·РґР°РЅРёРµ С„Р°Р№Р»Р° СЃС‚Р°С‚РёСЃС‚РёРєРё");
         XlsWriter.createAndWriteTable(statisticsList, "src/main/resources/statistic.xlsx");
+
+        // РЎРѕР·РґР°РЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° РєР»Р°СЃСЃР° СЃ РґР°РЅРЅС‹РјРё РґР»СЏ СЃРѕР·РґР°РЅРёСЏ XML Рё JSON С„Р°Р№Р»РѕРІ
+        DataForXmlJsonFile dataForXmlJsonFile = new DataForXmlJsonFile(students, universities, statisticsList, LocalDateTime.now().toString());
+        // РЎРѕР·РґР°РЅРёРµ XML С„Р°Р№Р»Р°
+        log.info("РіРµРЅРµСЂРёСЂРѕРІР°РЅРёРµ XML С„Р°Р№Р»Р°");
+        XmlWriter.createXmlFiles(dataForXmlJsonFile);
+        // РЎРѕР·РґР°РЅРёРµ JSON С„Р°Р№Р»РѕРІ
+        log.info("РіРµРЅРµСЂРёСЂРѕРІР°РЅРёРµ JSON С„Р°Р№Р»РѕРІ");
+        JsonWriter.createJsonFiles(dataForXmlJsonFile);
+        log.info("РљРѕРЅРµС† СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹");
     }
 }

@@ -1,26 +1,31 @@
 package org.example;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class XlsWriter {
+    private static final Logger log = Logger.getLogger(XlsWriter.class.getName());
+
     private XlsWriter() {
     }
 
     public static void createAndWriteTable(List<Statistics> statisticsList, String pathname) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Statistic");
-        // Шрифт заголовка
+        // РЁСЂРёС„С‚ Р·Р°РіРѕР»РѕРІРєР°
         Font titleFont = workbook.createFont();
         titleFont.setBold(true);
         titleFont.setFontHeight((short) (12 * 20));
-        // Стиль ячейки заголовка
+        // РЎС‚РёР»СЊ СЏС‡РµР№РєРё Р·Р°РіРѕР»РѕРІРєР°
         CellStyle titleCellStyle = workbook.createCellStyle();
         titleCellStyle.setFont(titleFont);
-        // строка заголовка
+        // СЃС‚СЂРѕРєР° Р·Р°РіРѕР»РѕРІРєР°
         Row row = sheet.createRow(0);
-        // Ячейки заголовков
+        // РЇС‡РµР№РєРё Р·Р°РіРѕР»РѕРІРєРѕРІ
         Cell rowCount = row.createCell(0);
         rowCount.setCellStyle(titleCellStyle);
         Cell studyProfileCell = row.createCell(1);
@@ -33,15 +38,15 @@ public class XlsWriter {
         universityCountByProfileCell.setCellStyle(titleCellStyle);
         Cell universityName = row.createCell(5);
         universityName.setCellStyle(titleCellStyle);
-        // Названия заголовков
-        rowCount.setCellValue("№п/п");
-        studyProfileCell.setCellValue("Профиль студентов");
-        avgExamScoreCell.setCellValue("Средний балл");
-        studentCountByProfileCell.setCellValue("Количество студентов по профилю");
-        universityCountByProfileCell.setCellValue("Количество университетов по профилю");
-        universityName.setCellValue("Название университетов");
-
-        // создание строк из списка коллекций
+        // РќР°Р·РІР°РЅРёСЏ Р·Р°РіРѕР»РѕРІРєРѕРІ
+        rowCount.setCellValue("в„–Рї/Рї");
+        studyProfileCell.setCellValue("РџСЂРѕС„РёР»СЊ СЃС‚СѓРґРµРЅС‚РѕРІ");
+        avgExamScoreCell.setCellValue("РЎСЂРµРґРЅРёР№ Р±Р°Р»Р»");
+        studentCountByProfileCell.setCellValue("РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СѓРґРµРЅС‚РѕРІ РїРѕ РїСЂРѕС„РёР»СЋ");
+        universityCountByProfileCell.setCellValue("РљРѕР»РёС‡РµСЃС‚РІРѕ СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РїРѕ РїСЂРѕС„РёР»СЋ");
+        universityName.setCellValue("РќР°Р·РІР°РЅРёРµ СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ");
+        log.info("РўР°Р±Р»РёС†Р° СЃС‚Р°С‚РёСЃС‚РёРєРё СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅР°");
+        // СЃРѕР·РґР°РЅРёРµ СЃС‚СЂРѕРє РёР· СЃРїРёСЃРєР° РєРѕР»Р»РµРєС†РёР№
         for (int i = 0; i < statisticsList.size(); i++) {
             Row newRow = sheet.createRow(i + 1);
             Cell newRowCountCell = newRow.createCell(0);
@@ -51,20 +56,23 @@ public class XlsWriter {
             Cell newUniversityCountByProfileCell = newRow.createCell(4);
             Cell newUniversityName = newRow.createCell(5);
             newRowCountCell.setCellValue(i + 1);
-            newStudyProfileCell.setCellValue(statisticsList.get(i).getStudyProfile());
+            newStudyProfileCell.setCellValue(statisticsList.get(i).getStudyProfile().getProfileName());
             newAvgExamScoreCell.setCellValue(Float.parseFloat(String.valueOf(statisticsList.get(i).getAvgExamScore())));
             newStudentCountByProfileCell.setCellValue(statisticsList.get(i).getStudentCountByProfile());
             newUniversityCountByProfileCell.setCellValue(statisticsList.get(i).getUniversityCountByProfile());
             String universityNames = String.join(",", statisticsList.get(i).getUniversityName());
             newUniversityName.setCellValue(universityNames);
         }
-        // запись в файл
+        log.info("РЈСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅРѕ РІ С‚Р°Р±Р»РёС†Сѓ СЃС‚Р°С‚РёСЃС‚РёРєРё - " + statisticsList.size() + " СЃС‚СЂРѕРє");
+        // Р·Р°РїРёСЃСЊ РІ С„Р°Р№Р»
         File file = new File(pathname);
         FileOutputStream fileInputStream = null;
         try {
             fileInputStream = new FileOutputStream(file);
             workbook.write(fileInputStream);
+            log.info("Р¤Р°Р№Р» СЃС‚Р°С‚РёСЃС‚РёРєРё СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ Рё Р·Р°РїРёСЃР°РЅ");
         } catch (IOException e) {
+            log.severe("РћС€РёР±РєР° СЃРѕР·РґР°РЅРёСЏ Рё Р·Р°РїРёСЃРё С„Р°Р№Р»Р° СЃС‚Р°С‚РёСЃС‚РёРєРё");
             e.printStackTrace();
         }
     }

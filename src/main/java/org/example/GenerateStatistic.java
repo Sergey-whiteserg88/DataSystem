@@ -4,48 +4,51 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 public class GenerateStatistic {
+    private static final Logger log = Logger.getLogger(GenerateStatistic.class.getName());
 
     private GenerateStatistic() {
     }
 
-    public static List<Statistics> statisticsList(List<Student> studentList, List<University> universityList){
+    public static List<Statistics> statisticsList(List<Student> studentList, List<University> universityList) {
         List<Statistics> statisticsList = new ArrayList<>();
-        // Перебор профилей
-        for(StudyProfile studyProfile : StudyProfile.values()){
-            // Имена университетов
+        // РџРµСЂРµР±РѕСЂ РїСЂРѕС„РёР»РµР№
+        for (StudyProfile studyProfile : StudyProfile.values()) {
+            // РРјРµРЅР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
             List<String> universityNames = new ArrayList<>();
-            // Коллекция средних оценов
+            // РљРѕР»Р»РµРєС†РёСЏ СЃСЂРµРґРЅРёС… РѕС†РµРЅРѕРІ
             List<Float> avgScore = new ArrayList<>();
-            // Количество университетов
+            // РљРѕР»РёС‡РµСЃС‚РІРѕ СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
             AtomicInteger universityCount = new AtomicInteger();
-            // Количество студентов
+            // РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СѓРґРµРЅС‚РѕРІ
             AtomicInteger studentCount = new AtomicInteger();
-            // Перебор университетов по профилю
+            // РџРµСЂРµР±РѕСЂ СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ РїРѕ РїСЂРѕС„РёР»СЋ
             universityList.stream().filter(university -> university.getMainProfile().equals(studyProfile)).
                     forEach(university -> {
                         universityNames.add(university.getShortName());
                         universityCount.getAndIncrement();
-                        // Перебор студентов по id университета
+                        // РџРµСЂРµР±РѕСЂ СЃС‚СѓРґРµРЅС‚РѕРІ РїРѕ id СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р°
                         studentList.stream().filter(student -> student.getUniversityId().equals(university.getId())).
                                 forEach(student -> {
-                                        studentCount.getAndIncrement();
-                                        avgScore.add(student.getAvgExamScore());
+                                    studentCount.getAndIncrement();
+                                    avgScore.add(student.getAvgExamScore());
                                 });
                     });
-            // Преобразование коллекции средних оценок в массив
+            // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РєРѕР»Р»РµРєС†РёРё СЃСЂРµРґРЅРёС… РѕС†РµРЅРѕРє РІ РјР°СЃСЃРёРІ
             double[] arr = avgScore.stream().mapToDouble(Float::doubleValue).toArray();
-            // получение среднего значения из массива средних оценок
+            // РїРѕР»СѓС‡РµРЅРёРµ СЃСЂРµРґРЅРµРіРѕ Р·РЅР°С‡РµРЅРёСЏ РёР· РјР°СЃСЃРёРІР° СЃСЂРµРґРЅРёС… РѕС†РµРЅРѕРє
             OptionalDouble optionalAvgScore = OptionalDouble.of(Arrays.stream(arr).average().orElse(0));
-            // округление до 2-х знаков
+            // РѕРєСЂСѓРіР»РµРЅРёРµ РґРѕ 2-С… Р·РЅР°РєРѕРІ
             BigDecimal avg = BigDecimal.valueOf(optionalAvgScore.getAsDouble()).setScale(2, RoundingMode.HALF_UP);
-            // добавление в коллекцию
-            statisticsList.add(new Statistics(studyProfile.getProfileName(), avg, studentCount.get(), universityCount.get(), universityNames));
+            // РґРѕР±Р°РІР»РµРЅРёРµ РІ РєРѕР»Р»РµРєС†РёСЋ
+            statisticsList.add(new Statistics(studyProfile, avg, studentCount.get(), universityCount.get(), universityNames));
         }
+        if (studentList.size() == 0) log.warning("РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃС‚СѓРґРµРЅС‚Р°С… РґР»СЏ СЃС‚Р°С‚РёСЃС‚РёРєРё!");
+        if (universityList.size() == 0) log.warning("РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РёРЅС„РѕСЂРјР°С†РёСЏ РѕР± СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р°С… РґР»СЏ СЃС‚Р°С‚РёСЃС‚РёРєРё!");
         return statisticsList;
     }
-
 
 
 }

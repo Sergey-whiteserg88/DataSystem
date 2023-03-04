@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="windows-1251">
-    <file url="file://$PROJECT_DIR$/src/main/java/org/example/StudyProfile.java" charset="windows-1251" />
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/DataForXmlJsonFile.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/GenerateStatistic.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/JsonUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/JsonWriter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/Main.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/ReadExelData.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/Statistics.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/Student.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/Students.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/StudyProfile.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/Universities.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/University.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/XlsWriter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/XmlWriter.java" charset="UTF-8" />
     <file url="PROJECT" charset="windows-1251" />
   </component>
 </project>

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class JsonUtil {
@@ -12,7 +11,15 @@ public class JsonUtil {
     private JsonUtil() {
     }
 
-    // сериализация студента
+    // РѕРґРёРЅ РѕР±С‰РёР№ РјРµС‚РѕРґ РЅРµ РїСЂРёРІСЏР·Р°РЅРЅС‹Р№ СЃ С‚РёРїР°Рј
+    public static String serializedData(List<Object> objectList) {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(objectList);
+    }
+
+    // СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃС‚СѓРґРµРЅС‚Р°
     public static String serializedStudent(Student student) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -20,7 +27,7 @@ public class JsonUtil {
         return gson.toJson(student);
     }
 
-    // сериализация университета
+    // СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р°
     public static String serializedUniversity(University university) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -28,7 +35,7 @@ public class JsonUtil {
         return gson.toJson(university);
     }
 
-    // сериализация списка студентов
+    // СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃРїРёСЃРєР° СЃС‚СѓРґРµРЅС‚РѕРІ
     public static String serializedStudentList(List<Student> studentList) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -36,7 +43,7 @@ public class JsonUtil {
         return gson.toJson(studentList);
     }
 
-    // сериализация списка университетов
+    // СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃРїРёСЃРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
     public static String serializedUniversityList(List<University> universityList) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -44,23 +51,39 @@ public class JsonUtil {
         return gson.toJson(universityList);
     }
 
-    // десериализация студента
+    // РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃС‚СѓРґРµРЅС‚Р°
     public static Student deserializedStudent(String jsonStudent) {
         return new Gson().fromJson(jsonStudent, Student.class);
     }
 
-    // десериализация списка студентов
+    // РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃРїРёСЃРєР° СЃС‚СѓРґРµРЅС‚РѕРІ
     public static List<Student> deserializedStudentList(String jsonStudentList) {
-        return new Gson().fromJson(jsonStudentList, new TypeToken<List<Student>>(){}.getType());
+        return new Gson().fromJson(jsonStudentList, new TypeToken<List<Student>>() {
+        }.getType());
     }
 
-    // десериализация университета
+    // РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р°
     public static University deserializedUniversity(String jsonUniversity) {
         return new Gson().fromJson(jsonUniversity, University.class);
     }
 
-    // десериализация списка университетов
+    // РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃРїРёСЃРєР° СѓРЅРёРІРµСЂСЃРёС‚РµС‚РѕРІ
     public static List<University> deserializedUniversityList(String jsonUniversityList) {
-        return new Gson().fromJson(jsonUniversityList, new TypeToken<List<University>>(){}.getType());
+        return new Gson().fromJson(jsonUniversityList, new TypeToken<List<University>>() {
+        }.getType());
+    }
+
+    // СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃС‚Р°С‚РёСЃС‚РёРєРё
+    public static String serializedStatisticList(List<Statistics> statisticsList) {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(statisticsList);
+    }
+
+    // РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ СЃС‚Р°С‚РёСЃС‚РёРєРё
+    public static List<Statistics> deserializedStatisticsList(String jsonStatisticsList) {
+        return new Gson().fromJson(jsonStatisticsList, new TypeToken<List<Statistics>>() {
+        }.getType());
     }
 }

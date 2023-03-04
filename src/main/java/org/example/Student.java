@@ -3,16 +3,25 @@ package org.example;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.xml.bind.annotation.*;
+
+//@XmlRootElement(name = "studentEntry")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Student {
-    @SerializedName("Полное имя")
+    @SerializedName("РџРѕР»РЅРѕРµ РёРјСЏ")
+    @XmlElement(name = "studentName")
     private String fullName;
-    @SerializedName("Идентификатор университета")
+    @SerializedName("РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р°")
+    @XmlElement(name = "universityId")
     private String universityId;
-    @SerializedName("Курс")
+    @SerializedName("РљСѓСЂСЃ")
+    @XmlTransient
     private int currentCourseNumber;
-    @SerializedName("Средний балл")
+    @SerializedName("РЎСЂРµРґРЅРёР№ Р±Р°Р»Р»")
+    @XmlElement(name = "avgScore")
     private float avgExamScore;
 
+    public Student(){}
     public Student(String fullName, String universityId, int currentCourseNumber, float avgExamScore) {
         this.fullName = fullName;
         this.universityId = universityId;
@@ -62,7 +71,7 @@ public class Student {
                 '}';
     }
 
-    // сортировка студентов по имени
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СЃС‚СѓРґРµРЅС‚РѕРІ РїРѕ РёРјРµРЅРё
     public static class FullNameStudentCompare implements StudentInterface {
         @Override
         public int compare(Student o1, Student o2) {
@@ -70,7 +79,7 @@ public class Student {
         }
     }
 
-    // сортировка студентов по идентификатору университета
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СЃС‚СѓРґРµРЅС‚РѕРІ РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р°
     public static class UniversityIdStudentCompare implements StudentInterface {
         @Override
         public int compare(Student o1, Student o2) {
@@ -78,7 +87,7 @@ public class Student {
         }
     }
 
-    // сортировка студентов по номеру курса
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СЃС‚СѓРґРµРЅС‚РѕРІ РїРѕ РЅРѕРјРµСЂСѓ РєСѓСЂСЃР°
     public static class CurrentCourseNumberStudentCompare implements StudentInterface {
         @Override
         public int compare(Student o1, Student o2) {
@@ -86,7 +95,7 @@ public class Student {
         }
     }
 
-    // сортировка студентов по среднему баллу в обратном порядке
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° СЃС‚СѓРґРµРЅС‚РѕРІ РїРѕ СЃСЂРµРґРЅРµРјСѓ Р±Р°Р»Р»Сѓ РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ
     public static class AvgExamScoreStudentCompare implements StudentInterface {
         @Override
         public int compare(Student o1, Student o2) {
